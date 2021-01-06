@@ -1,0 +1,33 @@
+{
+    "name": "ding/laravel-echarts",
+    "description": "Build ECharts using laravel",
+    "keywords": ["laravel", "charts", "echarts"],
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Liu Ding",
+            "email": "liuding.ld@foxmail.com"
+        }
+    ],
+    "require": {
+        "php": "^7.0",
+        "illuminate/support": "^6|^7|^8"
+    },
+    "autoload": {
+        "psr-4": {
+            "Ding\\LaravelECharts\\": "src/"
+        }
+    },
+    "minimum-stability": "dev",
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Ding\\LaravelECharts\\LaravelEChartsServiceProvider"
+            ],
+            "aliases": {
+                "Chart": "Ding\\LaravelECharts\\Facade"
+            }
+        }
+    }
+}
