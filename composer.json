@@ -3,6 +3,7 @@
     "description": "Build ECharts using laravel",
     "keywords": ["laravel", "charts", "echarts"],
     "type": "library",
+    "homepage": "https://github.com/liudding/laravel-echarts",
     "license": "MIT",
     "authors": [
         {
