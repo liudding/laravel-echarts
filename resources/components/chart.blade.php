@@ -1,28 +1,80 @@
 <div id="{{$element}}" style="width: {{ $size['width'] ?? '100%' }};height:{{$size['height'] ?? '100%'}};"></div>
 
 <script type="text/javascript">
-
-    document.addEventListener("DOMContentLoaded", function(event) {
-        (function() {
+    document.addEventListener("DOMContentLoaded", function (event) {
+        (function () {
             "use strict";
-            let element = document.getElementById("{!! $element !!}");
+            let element = document.getElementById('{!! $element !!}');
 
-            var chart = echarts.init(element, '{{$theme}}', {
+            // if hidden do nothing
+
+            var chart;
+
+            function render() {
+                if (chart) {
+                    return;
+                }
+
+                chart = echarts.init(element, '{{$theme}}', {
                     renderer: '{{ $renderer }}',
                     width: 'auto',
                     height: 'auto',
                     locale: '{{ $locale }}',
                 })
-            chart.setOption(@json($option ?? []));
+
+                chart.setOption(@json($option ?? []));
+
+                window.addEventListener('resize', () => {
+                    chart.resize();
+                })
+
+                const resizeObserver = new ResizeObserver(entries => {
+                    chart.resize();
+                });
+                resizeObserver.observe(element.parentElement);
+            }
+
+            function getOffsetTop(ele) {
+                var actualTop = ele.offsetTop;
+                var current = ele.offsetParent;
+
+                while (current !== null) {
+                    actualTop += current.offsetTop;
+                    current = current.offsetParent;
+                }
+
+                return actualTop;
+            }
+
+            function visible(threshold) {
+                let th = threshold || 0
+
+                var wt = window.pageYOffset,
+                    wb = wt + window.innerHeight,
+                    et = getOffsetTop(element),
+                    eb = et + element.offsetHeight;
+
+                return eb >= wt - th && et <= wb + th;
+            }
+           
+
+            if (visible()) {
+                render();
+            }
 
             window.addEventListener('resize', () => {
-                chart.resize();
+                if (visible()) {
+                    render();
+                }
             })
 
-            const resizeObserver = new ResizeObserver(entries => {
-                chart.resize();
-            });
-            resizeObserver.observe(element.parentElement);
+            window.addEventListener('scroll', () => {
+                if (visible()) {
+                    render();
+                }
+            })
+
         })();
     });
+
 </script>
