@@ -27,7 +27,8 @@ $chart = app('chart')->locale('ZH')
     ])
     ->xAxis(['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'])
     ->yAxis()
-    ->legend()
+    ->legend() // 自动根据 series names 设置 legend
+    ->lazy(); // 懒加载
 
 ```
 

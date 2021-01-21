@@ -20,6 +20,11 @@ class Chart
     protected $theme;
 
     protected $locale = 'ZH';
+    
+    /**
+     * 是否启用懒加载
+     */
+    protected $lazy = false;
 
     public function __construct(?array $option = null)
     {
@@ -209,6 +214,13 @@ class Chart
     public function locale($locale)
     {
         $this->locale = $locale;
+
+        return $this;
+    }
+
+    public function lazy($lazy=true)
+    {
+        $this->lazy = $lazy;
 
         return $this;
     }

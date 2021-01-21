@@ -5,16 +5,10 @@
         (function () {
             "use strict";
             let element = document.getElementById('{!! $element !!}');
-
-            // if hidden do nothing
-
-            var chart;
+            let chart;
 
             function render() {
-                if (chart) {
-                    return;
-                }
-
+                if (chart) return;
                 chart = echarts.init(element, '{{$theme}}', {
                     renderer: '{{ $renderer }}',
                     width: 'auto',
@@ -34,9 +28,10 @@
                 resizeObserver.observe(element.parentElement);
             }
 
+            @if ($lazy)    
             function getOffsetTop(ele) {
-                var actualTop = ele.offsetTop;
-                var current = ele.offsetParent;
+                let actualTop = ele.offsetTop;
+                let current = ele.offsetParent;
 
                 while (current !== null) {
                     actualTop += current.offsetTop;
@@ -46,34 +41,39 @@
                 return actualTop;
             }
 
-            function visible(threshold) {
+            /**
+             * 元素是否可见。 自身或者父元素 display:none; 
+             */
+            function visible(elem) {
+                return !!( elem.offsetWidth || elem.offsetHeight || elem.getClientRects().length );
+            }
+
+            function reveal(element, threshold) {
                 let th = threshold || 0
 
-                var wt = window.pageYOffset,
+                let wt = window.pageYOffset,
                     wb = wt + window.innerHeight,
                     et = getOffsetTop(element),
                     eb = et + element.offsetHeight;
 
                 return eb >= wt - th && et <= wb + th;
             }
-           
-
-            if (visible()) {
+        
+            if (visible(element) && reveal(element)) {
                 render();
             }
 
-            window.addEventListener('resize', () => {
-                if (visible()) {
-                    render();
-                }
-            })
+            let onWindowChange = function() {
+                reveal(element) && render();
+            }
+        
 
-            window.addEventListener('scroll', () => {
-                if (visible()) {
-                    render();
-                }
-            })
+            window.addEventListener('resize', onWindowChange)
+            window.addEventListener('scroll', onWindowChange)
 
+            @else
+            render();
+            @endif
         })();
     });
 
