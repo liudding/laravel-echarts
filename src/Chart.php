@@ -282,7 +282,8 @@ class Chart
             'renderer' => $this->renderer,
             'size' => $this->size,
             'theme' => $this->theme,
-            'locale' => $this->locale
+            'locale' => $this->locale,
+            'lazy' => $this->lazy
         ]);
     }
 }
